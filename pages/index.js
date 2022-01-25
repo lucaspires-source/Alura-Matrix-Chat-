@@ -1,35 +1,10 @@
 import appConfig from '../config.json'
 import { Box, Button, Text, TextField, Image } from '@skynexui/components';
-function GlobalStyle() {
-    return (
-        <style global jsx>
-            {`
-      * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-        list-style: none;
-      }
-      body {
-        font-family: 'Open Sans', sans-serif;
-      }
-      /* App fit Height */ 
-      html, body, #__next {
-        min-height: 100vh;
-        display: flex;
-        flex: 1;
-      }
-      #__next {
-        flex: 1;
-      }
-      #__next > * {
-        flex: 1;
-      }
-      /* ./App fit Height */ 
-            `}
-        </style>
-    )
-}
+import {useState} from 'react'
+import {useRouter} from 'next/router'
+
+
+
 
 
 
@@ -53,10 +28,10 @@ function Titulo (props) {
 
 
 function HomePage() {
-    const username = 'lucaspires-source';
+    const [username, setUsername] = useState()
+    const router = useRouter()
     return(
         <>
-        <GlobalStyle />
         <Box
           styleSheet={{
             display: 'flex', alignItems: 'center', justifyContent: 'center',
@@ -87,6 +62,10 @@ function HomePage() {
                 display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
                 width: { xs: '100%', sm: '50%' }, textAlign: 'center', marginBottom: '32px',
               }}
+              onSubmit ={ function(e) {
+                e.preventDefault()
+                router.push('/chat')
+              }}
             >
               <Titulo tag="h2">Boas vindas de volta!</Titulo>
               <Text variant="body3" styleSheet={{ marginBottom: '32px', color: appConfig.theme.colors.neutrals[300] }}>
@@ -103,6 +82,10 @@ function HomePage() {
                     backgroundColor: appConfig.theme.colors.neutrals[800],
                   },
                 }}
+                onChange={function(e) {
+                  setUsername(e.target.value)
+                
+                }}
               />
               <Button
                 type='submit'
@@ -114,6 +97,7 @@ function HomePage() {
                   mainColorLight: appConfig.theme.colors.primary[400],
                   mainColorStrong: appConfig.theme.colors.primary[600],
                 }}
+
               />
             </Box>
             {/* Formulário */}
