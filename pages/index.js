@@ -64,7 +64,7 @@ function HomePage() {
               }}
               onSubmit ={ function(e) {
                 e.preventDefault()
-                router.push('/chat')
+                router.push(`/chat?username=${username}`)
               }}
             >
               <Titulo tag="h2">Boas vindas de volta!</Titulo>
