@@ -1,27 +1,46 @@
 import { Box, Text, TextField, Image, Button } from '@skynexui/components';
-import React,{useState} from 'react';
+import React,{useState, useEffect} from 'react';
 import appConfig from '../config.json';
+import { SUPABASE_ANON_KEY,SUPABASE_URL } from '../keys';
+import { createClient } from '@supabase/supabase-js';
+import { formatWithValidation } from 'next/dist/shared/lib/utils';
 
+
+const supabaseClient = createClient(SUPABASE_URL,SUPABASE_ANON_KEY)
 
 
 export default function ChatPage() {
     const [mensagem, setMensagem] = useState('')
     const [listaDeMensagens, setListaDeMensagens] = useState([])
 
+    useEffect(() =>{
+        supabaseClient
+            .from('mensagens')
+            .select('*')
+            .then(({data}) =>{
+                setListaDeMensagens(data)
+    })
+    ,[]})
     function handleNovaMensagem(novaMensagem){
 
         const mensagem = {
             texto:novaMensagem,
             de:'lucaspires-source',
-            id:listaDeMensagens.length + 1
         }
-        setListaDeMensagens([
 
-            mensagem,
-            ...listaDeMensagens,
-        ])
+        supabaseClient
+            .from('mensagens')
+            .insert([mensagem])
+            .then(({data}) =>{
+                setListaDeMensagens([
+                    data[0],
+                    ...listaDeMensagens,
+                ])
+            })
+
         setMensagem('')
     }
+
     return (
         <Box
             styleSheet={{
