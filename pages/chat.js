@@ -31,6 +31,7 @@ export default function ChatPage() {
         supabaseClient
             .from('mensagens')
             .insert([mensagem])
+            .order('id', {ascending:false})
             .then(({data}) =>{
                 setListaDeMensagens([
                     data[0],
